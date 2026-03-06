@@ -512,18 +512,29 @@ function openMobileSidebar() {
 function bindSidebar() {
   const sidebar = document.getElementById("sidebar");
   const overlay = document.getElementById("sidebar-overlay");
+  const peek = document.getElementById("mobile-peek");
 
   if (isMobile()) {
     sidebar.classList.add("collapsed");
+    initPeekBar();
   }
 
   document.getElementById("sidebar-toggle").addEventListener("click", () => {
     sidebar.classList.add("collapsed");
   });
 
-  document.getElementById("mobile-sidebar-btn").addEventListener("click", () => {
+  document.getElementById("mobile-sidebar-btn")?.addEventListener("click", () => {
     if (sidebar.classList.contains("collapsed")) {
       openMobileSidebar();
+    } else {
+      closeMobileSidebar();
+    }
+  });
+
+  document.getElementById("peek-btn")?.addEventListener("click", () => {
+    if (sidebar.classList.contains("collapsed")) {
+      openMobileSidebar();
+      peek.classList.add("open");
     } else {
       closeMobileSidebar();
     }
@@ -532,7 +543,9 @@ function bindSidebar() {
   overlay.addEventListener("click", closeMobileSidebar);
 
   map.on("click", () => {
-    if (isMobile()) closeMobileSidebar();
+    if (isMobile() && !sidebar.classList.contains("collapsed")) {
+      closeMobileSidebar();
+    }
   });
 
   let touchStartY = 0;
@@ -542,9 +555,41 @@ function bindSidebar() {
 
   sidebar.addEventListener("touchend", (e) => {
     const deltaY = e.changedTouches[0].clientY - touchStartY;
-    if (deltaY > 80) closeMobileSidebar();
+    if (deltaY > 60) closeMobileSidebar();
   }, { passive: true });
 }
+
+function initPeekBar() {
+  const peek = document.getElementById("mobile-peek");
+  if (!peek) return;
+
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const today = new Date();
+  const day = today.getDate();
+  const dayName = dayNames[today.getDay()];
+
+  const peekDay = document.getElementById("peek-day");
+  const peekDetail = document.getElementById("peek-detail");
+
+  if (day >= 9 && day <= 13 && today.getMonth() === 2) {
+    peekDay.textContent = `${dayName} Mar ${day}`;
+    const dayEl = document.querySelector(`.day[data-day="${day}"]`);
+    if (dayEl) {
+      const firstDetail = dayEl.querySelector(".time-detail");
+      peekDetail.textContent = firstDetail ? firstDetail.textContent : "View schedule";
+    }
+  } else {
+    peekDay.textContent = "Schedule";
+    peekDetail.textContent = "Mar 9–13 · Tap to view";
+  }
+}
+
+const _origClose = closeMobileSidebar;
+closeMobileSidebar = function() {
+  _origClose();
+  const peek = document.getElementById("mobile-peek");
+  if (peek) peek.classList.remove("open");
+};
 
 /* ── Transport Mode ───────────────────────────────────── */
 

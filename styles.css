@@ -648,6 +648,10 @@ body.transport-active #map {
   display: none;
 }
 
+#mobile-peek {
+  display: none;
+}
+
 #sidebar-overlay {
   display: none;
 }
@@ -661,21 +665,86 @@ body.transport-active #map {
     order: 1;
     flex: 1;
     min-height: 0;
+    position: relative;
   }
 
+  /* Filter bar floats over the map */
   #filter-bar {
-    height: 46px;
-    min-height: 46px;
-    gap: 6px;
-    padding: 0 12px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    height: 44px;
+    min-height: 44px;
+    gap: 5px;
+    padding: 0 10px;
+    background: linear-gradient(to bottom, var(--bg) 60%, transparent);
+    border-bottom: none;
   }
 
   .filter-btn {
-    font-size: 12px;
-    padding: 7px 12px;
-    min-height: 32px;
+    font-size: 11px;
+    padding: 5px 10px;
+    min-height: 28px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
+  /* Persistent day-peek strip at bottom */
+  #mobile-peek {
+    display: flex;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  #mobile-peek .peek-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #mobile-peek .peek-day {
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  #mobile-peek .peek-detail {
+    flex: 1;
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #mobile-peek .peek-chevron {
+    font-size: 18px;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  #mobile-peek.open .peek-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Bottom sheet sidebar */
   #sidebar {
     order: 2;
     position: fixed;
@@ -685,14 +754,14 @@ body.transport-active #map {
     width: 100%;
     min-width: 100%;
     height: auto;
-    max-height: 70vh;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: 75vh;
+    border-radius: 20px 20px 0 0;
     border-right: none;
     border-top: 1px solid var(--border);
     z-index: 200;
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     transform: translateY(0);
-    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.5);
     margin-left: 0;
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
@@ -704,10 +773,11 @@ body.transport-active #map {
   }
 
   .sidebar-header {
-    padding: 14px 20px 12px;
+    padding: 16px 20px 10px;
     display: flex;
     align-items: center;
     gap: 12px;
+    cursor: grab;
   }
 
   .sidebar-header::before {
@@ -716,20 +786,20 @@ body.transport-active #map {
     top: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 32px;
+    width: 36px;
     height: 4px;
     border-radius: var(--radius-full);
     background: var(--text-muted);
-    opacity: 0.4;
+    opacity: 0.35;
   }
 
   .sidebar-header h1 {
     font-size: 17px;
-    margin-top: 6px;
+    margin-top: 4px;
   }
 
   .sidebar-header .subtitle {
-    margin-top: 6px;
+    margin-top: 4px;
     font-size: 11px;
   }
 
@@ -738,21 +808,21 @@ body.transport-active #map {
   }
 
   #schedule {
-    padding: 0 0 8px;
+    padding: 0 0 12px;
   }
 
   .day-header {
-    padding: 12px 18px;
+    padding: 14px 20px;
     font-size: 14px;
-    min-height: 44px;
+    min-height: 48px;
   }
 
   .day.open .day-body {
-    padding: 0 18px 14px;
+    padding: 0 20px 14px;
   }
 
   .time-block {
-    padding: 5px 0;
+    padding: 6px 0;
     font-size: 14px;
   }
 
@@ -766,27 +836,9 @@ body.transport-active #map {
     -webkit-tap-highlight-color: transparent;
   }
 
+  /* Hide generic schedule btn — peek bar replaces it */
   #mobile-sidebar-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    position: fixed;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    padding: 11px 22px;
-    border-radius: var(--radius-full);
-    background: var(--bg-card);
-    color: var(--text);
-    font-size: 13px;
-    font-weight: 500;
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    -webkit-tap-highlight-color: transparent;
-    padding-bottom: calc(11px + env(safe-area-inset-bottom, 0));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    display: none !important;
   }
 
   #sidebar-overlay {
@@ -807,6 +859,7 @@ body.transport-active #map {
     pointer-events: none;
   }
 
+  /* Popups */
   .custom-popup .leaflet-popup-content-wrapper {
     border-radius: var(--radius);
   }
@@ -828,14 +881,24 @@ body.transport-active #map {
   }
 
   .iw-gmaps {
-    padding: 7px 12px;
+    padding: 8px 12px;
     font-size: 12px;
   }
 
+  /* Controls */
   .leaflet-control-zoom {
-    margin-bottom: 70px !important;
+    margin-bottom: 16px !important;
+    margin-right: 10px !important;
   }
 
+  .leaflet-control-zoom a {
+    width: 36px !important;
+    height: 36px !important;
+    line-height: 36px !important;
+    font-size: 18px !important;
+  }
+
+  /* Markers */
   .home-marker {
     width: 42px;
     height: 42px;
@@ -858,8 +921,9 @@ body.transport-active #map {
     font-size: 13px;
   }
 
+  /* Transport — position above peek bar */
   #transport-toggle {
-    bottom: 16px;
+    bottom: calc(52px + env(safe-area-inset-bottom, 0));
     right: 12px;
     font-size: 12px;
     padding: 10px 14px;
@@ -867,7 +931,7 @@ body.transport-active #map {
   }
 
   #transport-panel {
-    bottom: 12px;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0));
     left: 8px;
     right: 8px;
     transform: none;
@@ -888,6 +952,16 @@ body.transport-active #map {
 
   .transport-time {
     font-size: 15px;
+  }
+
+  /* Attribution smaller on mobile */
+  .leaflet-control-attribution {
+    font-size: 9px !important;
+    padding: 1px 6px !important;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
