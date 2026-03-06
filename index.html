@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buenos Aires Trip — March 9–13, 2026</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <aside id="sidebar">
+    <header class="sidebar-header">
+      <h1>Buenos Aires</h1>
+      <p class="subtitle">March 9 – 13, 2026</p>
+      <button id="sidebar-toggle" aria-label="Toggle sidebar">&#x2039;</button>
+    </header>
+
+    <nav id="schedule">
+      <div class="day" data-day="9">
+        <button class="day-header">
+          <span class="day-label">Mon <strong>Mar 9</strong></span>
+          <span class="chevron">&#9662;</span>
+        </button>
+        <div class="day-body">
+          <div class="time-block">
+            <span class="time-label">Morning</span>
+            <span class="time-detail">Flight</span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Midday</span>
+            <span class="time-detail">Arrive 15:10 — Check-in</span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Evening</span>
+            <span class="time-detail">Dinner + walk downtown</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="day" data-day="10">
+        <button class="day-header">
+          <span class="day-label">Tue <strong>Mar 10</strong></span>
+          <span class="chevron">&#9662;</span>
+        </button>
+        <div class="day-body">
+          <div class="time-block">
+            <span class="time-label">Morning</span>
+            <span class="time-detail">Walk + <a href="#" data-focus="lab-tostadores" class="place-link">coffee</a></span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Midday</span>
+            <span class="time-detail"><a href="#" data-focus="wework-butty" class="place-link">WeWork</a></span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Evening</span>
+            <span class="time-detail">Evening with friends</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="day" data-day="11">
+        <button class="day-header">
+          <span class="day-label">Wed <strong>Mar 11</strong></span>
+          <span class="chevron">&#9662;</span>
+        </button>
+        <div class="day-body">
+          <div class="time-block">
+            <span class="time-label">Morning</span>
+            <span class="time-detail">Walk + <a href="#" data-focus="cuervo-cafe" class="place-link">coffee</a></span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Midday</span>
+            <span class="time-detail"><a href="#" data-focus="wework-butty" class="place-link">WeWork</a></span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Evening</span>
+            <span class="time-detail">Solo walk: <a href="#" data-focus="plaza-serrano" class="place-link">Palermo Soho</a> → <a href="#" data-focus="rapanui" class="place-link">Rapanui</a> → Recoleta</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="day" data-day="12">
+        <button class="day-header">
+          <span class="day-label">Thu <strong>Mar 12</strong></span>
+          <span class="chevron">&#9662;</span>
+        </button>
+        <div class="day-body">
+          <div class="time-block">
+            <span class="time-label">Morning</span>
+            <span class="time-detail">Walk + <a href="#" data-focus="full-city-coffee" class="place-link">coffee</a></span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Midday</span>
+            <span class="time-detail"><a href="#" data-focus="wework-butty" class="place-link">WeWork</a></span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Evening</span>
+            <span class="time-detail">Jazz: <a href="#" data-focus="thelonius-club" class="place-link">Thelonius Club</a> 21:30–23:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="day" data-day="13">
+        <button class="day-header">
+          <span class="day-label">Fri <strong>Mar 13</strong></span>
+          <span class="chevron">&#9662;</span>
+        </button>
+        <div class="day-body">
+          <div class="time-block">
+            <span class="time-label">Morning</span>
+            <span class="time-detail">Walk + coffee</span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Midday</span>
+            <span class="time-detail">Airport ~12:30</span>
+          </div>
+          <div class="time-block">
+            <span class="time-label">Evening</span>
+            <span class="time-detail">Flight 16:00</span>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <main id="main">
+    <div id="filter-bar">
+      <button class="filter-btn active" data-category="all">All</button>
+      <button class="filter-btn" data-category="coffee">Coffee</button>
+      <button class="filter-btn" data-category="work">Work</button>
+      <button class="filter-btn" data-category="walk">Run / Walk</button>
+      <button class="filter-btn" data-category="food">Food</button>
+      <button class="filter-btn" data-category="desserts">Desserts</button>
+      <button class="filter-btn" data-category="culture">Culture</button>
+      <button class="filter-btn" data-category="music">Music</button>
+      <button class="filter-btn" data-category="arts">Arts</button>
+    </div>
+    <div id="map"></div>
+  </main>
+
+  <div id="transport-panel" class="hidden">
+    <button id="transport-close" aria-label="Close">&times;</button>
+    <div id="transport-header">
+      <span id="transport-from">—</span>
+      <span class="transport-arrow">&rarr;</span>
+      <span id="transport-to">—</span>
+    </div>
+    <div id="transport-results">
+      <div class="transport-mode" id="walk-result">
+        <span class="transport-icon">🚶</span>
+        <div class="transport-info">
+          <span class="transport-label">Walking</span>
+          <span class="transport-time" id="walk-time">—</span>
+          <span class="transport-dist" id="walk-dist">—</span>
+        </div>
+      </div>
+      <div class="transport-mode" id="uber-result">
+        <span class="transport-icon">🚗</span>
+        <div class="transport-info">
+          <span class="transport-label">Uber</span>
+          <span class="transport-time" id="uber-time">—</span>
+          <span class="transport-dist" id="uber-dist">—</span>
+        </div>
+        <span class="transport-cost" id="uber-cost">—</span>
+      </div>
+    </div>
+    <div id="transport-hint-panel">Click two markers to compare routes</div>
+  </div>
+
+  <button id="transport-toggle" aria-label="Transport mode">🚗 Transport</button>
+
+  <div id="sidebar-overlay" class="hidden"></div>
+  <button id="mobile-sidebar-btn" aria-label="Open schedule">&#9776; Schedule</button>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
