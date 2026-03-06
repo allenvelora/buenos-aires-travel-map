@@ -644,11 +644,7 @@ body.transport-active #map {
 
 /* ── Mobile ──────────────────────────────────────────── */
 
-#mobile-sidebar-btn {
-  display: none;
-}
-
-#mobile-peek {
+#mobile-tabs {
   display: none;
 }
 
@@ -657,15 +653,63 @@ body.transport-active #map {
 }
 
 @media (max-width: 720px) {
-  body {
-    flex-direction: column;
+  :root {
+    --tab-h: 56px;
   }
 
+  body {
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* ── Bottom Tab Bar ── */
+  #mobile-tabs {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 500;
+    height: var(--tab-h);
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  #mobile-tabs .tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    -webkit-tap-highlight-color: transparent;
+    transition: color 0.15s;
+    padding: 6px 0;
+  }
+
+  #mobile-tabs .tab.active {
+    color: var(--text);
+  }
+
+  #mobile-tabs .tab.active svg {
+    stroke: var(--ring);
+  }
+
+  #mobile-tabs .tab svg {
+    transition: stroke 0.15s;
+  }
+
+  /* ── Map View (default) ── */
   #main {
     order: 1;
     flex: 1;
     min-height: 0;
     position: relative;
+    padding-bottom: var(--tab-h);
   }
 
   /* Filter bar floats over the map */
@@ -674,12 +718,12 @@ body.transport-active #map {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 500;
+    z-index: 400;
     height: 44px;
     min-height: 44px;
     gap: 5px;
     padding: 0 10px;
-    background: linear-gradient(to bottom, var(--bg) 60%, transparent);
+    background: linear-gradient(to bottom, var(--bg) 50%, transparent);
     border-bottom: none;
   }
 
@@ -687,115 +731,53 @@ body.transport-active #map {
     font-size: 11px;
     padding: 5px 10px;
     min-height: 28px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
 
-  /* Persistent day-peek strip at bottom */
-  #mobile-peek {
-    display: flex;
-    align-items: center;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    background: var(--bg-card);
-    border-top: 1px solid var(--border);
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-
-  #mobile-peek .peek-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--text);
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  #mobile-peek .peek-day {
-    font-weight: 700;
-    white-space: nowrap;
-  }
-
-  #mobile-peek .peek-detail {
-    flex: 1;
-    font-size: 12px;
-    color: var(--text-muted);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  #mobile-peek .peek-chevron {
-    font-size: 18px;
-    color: var(--text-muted);
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-  }
-
-  #mobile-peek.open .peek-chevron {
-    transform: rotate(180deg);
-  }
-
-  /* Bottom sheet sidebar */
+  /* ── Schedule View (hidden by default) ── */
   #sidebar {
     order: 2;
     position: fixed;
-    bottom: 0;
+    top: 0;
     left: 0;
     right: 0;
+    bottom: var(--tab-h);
     width: 100%;
     min-width: 100%;
     height: auto;
-    max-height: 75vh;
-    border-radius: 20px 20px 0 0;
+    max-height: none;
+    border-radius: 0;
     border-right: none;
-    border-top: 1px solid var(--border);
     z-index: 200;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    transform: translateY(0);
-    box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease;
     margin-left: 0;
-    padding-bottom: env(safe-area-inset-bottom, 0);
+    padding-bottom: 0;
+    overflow-y: auto;
   }
 
   #sidebar.collapsed {
-    transform: translateY(calc(100% + 20px));
+    transform: translateX(-100%);
+    opacity: 0;
     margin-left: 0;
     pointer-events: none;
   }
 
   .sidebar-header {
-    padding: 16px 20px 10px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: grab;
+    padding: 16px 20px 12px;
+    position: sticky;
+    top: 0;
+    background: var(--bg-card);
+    z-index: 2;
+    border-bottom: 1px solid var(--border);
   }
 
   .sidebar-header::before {
-    content: "";
-    position: absolute;
-    top: 8px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 36px;
-    height: 4px;
-    border-radius: var(--radius-full);
-    background: var(--text-muted);
-    opacity: 0.35;
+    display: none;
   }
 
   .sidebar-header h1 {
-    font-size: 17px;
-    margin-top: 4px;
+    font-size: 20px;
+    margin-top: 0;
   }
 
   .sidebar-header .subtitle {
@@ -808,26 +790,26 @@ body.transport-active #map {
   }
 
   #schedule {
-    padding: 0 0 12px;
+    padding: 0 0 16px;
   }
 
   .day-header {
     padding: 14px 20px;
-    font-size: 14px;
-    min-height: 48px;
+    font-size: 15px;
+    min-height: 52px;
   }
 
   .day.open .day-body {
-    padding: 0 20px 14px;
+    padding: 0 20px 16px;
   }
 
   .time-block {
-    padding: 6px 0;
-    font-size: 14px;
+    padding: 7px 0;
+    font-size: 15px;
   }
 
   .time-label {
-    width: 60px;
+    width: 64px;
     font-size: 10px;
   }
 
@@ -836,27 +818,9 @@ body.transport-active #map {
     -webkit-tap-highlight-color: transparent;
   }
 
-  /* Hide generic schedule btn — peek bar replaces it */
-  #mobile-sidebar-btn {
-    display: none !important;
-  }
-
+  /* Overlay not needed in tab mode */
   #sidebar-overlay {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    z-index: 150;
-    opacity: 1;
-    transition: opacity 0.3s ease;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  #sidebar-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
+    display: none !important;
   }
 
   /* Popups */
@@ -869,7 +833,7 @@ body.transport-active #map {
   }
 
   .iw {
-    max-width: 220px;
+    max-width: 240px;
   }
 
   .iw-name {
@@ -885,9 +849,9 @@ body.transport-active #map {
     font-size: 12px;
   }
 
-  /* Controls */
+  /* Controls — above tab bar */
   .leaflet-control-zoom {
-    margin-bottom: 16px !important;
+    margin-bottom: 12px !important;
     margin-right: 10px !important;
   }
 
@@ -921,9 +885,9 @@ body.transport-active #map {
     font-size: 13px;
   }
 
-  /* Transport — position above peek bar */
+  /* Transport — above tab bar */
   #transport-toggle {
-    bottom: calc(52px + env(safe-area-inset-bottom, 0));
+    bottom: calc(var(--tab-h) + 12px + env(safe-area-inset-bottom, 0));
     right: 12px;
     font-size: 12px;
     padding: 10px 14px;
@@ -931,7 +895,7 @@ body.transport-active #map {
   }
 
   #transport-panel {
-    bottom: calc(56px + env(safe-area-inset-bottom, 0));
+    bottom: calc(var(--tab-h) + 12px + env(safe-area-inset-bottom, 0));
     left: 8px;
     right: 8px;
     transform: none;
@@ -954,14 +918,10 @@ body.transport-active #map {
     font-size: 15px;
   }
 
-  /* Attribution smaller on mobile */
+  /* Attribution */
   .leaflet-control-attribution {
     font-size: 9px !important;
     padding: 1px 6px !important;
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 
